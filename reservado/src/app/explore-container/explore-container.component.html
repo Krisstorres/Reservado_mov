@@ -1,0 +1,32 @@
+<ion-content>
+
+
+  
+  
+  
+  <swiper-container
+  #swiper
+  (afterinit)="swiperReady()"
+  (slidechange)="swiperSlideChanged($event)"
+  [loop]="true"
+  [pagination]="true"
+  >
+    <swiper-slide *ngFor="let image of images">
+      <ion-card sizeLg="6" sizeMd="6" sizeXs="12">
+      <img [src]="image">
+    </ion-card>
+    </swiper-slide>
+  </swiper-container>
+  <ion-item>
+    <ion-buttons class="botones">
+      <ion-button   (click)="goPrev()" class="botones">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+
+      <ion-button class="botones" (click)="goNext()">
+        
+        <ion-icon slot="icon-only"name="arrow-forward"></ion-icon>
+      </ion-button>
+  
+    </ion-buttons>
+  </ion-item>

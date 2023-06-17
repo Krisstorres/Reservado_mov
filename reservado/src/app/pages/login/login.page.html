@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar class= lila color="reservado">
+    <ion-title class="text">Reservado.com</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-img src="assets/images/logo reservado 2.png"></ion-img>
+
+  <ion-item class="ion-margin-top labe">
+    <ion-label position="floating">USUARIO</ion-label>
+    <ion-input [(ngModel)]="email" placeholder="Ingrese su usuario porfavor:"></ion-input>
+  </ion-item>
+
+  <ion-item class="ion-margin-top labe">
+    <ion-label position="floating" >CONTRASEÑA</ion-label>
+    <ion-input [(ngModel)]="pass" type="password" placeholder="Ingrese su contraseña porfavor:" ></ion-input>
+    
+  </ion-item>
+
+
+
+  
+  <ion-button expand="block"  (click)="navegar()">Iniciar sesión</ion-button>
+
+
+
+
+
+
+
+
+<ion-content>
