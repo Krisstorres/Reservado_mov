@@ -18,8 +18,10 @@
 </ion-content>
 <ion-content>
   <ion-row>
-    <ion-col>
-      hol
+    <ion-col >
+      <ion-card *ngFor="let edificio of Edificios">
+        <ion-title [src]="edificio">{{edificio}}</ion-title>
+      </ion-card>
     </ion-col>
 <ion-card>
 
