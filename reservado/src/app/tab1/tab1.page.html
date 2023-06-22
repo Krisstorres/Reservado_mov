@@ -3,31 +3,66 @@
     <ion-title class="text">Reservado.com</ion-title>
     <ion-title class="textR">Home</ion-title>
   </ion-toolbar>
+  <ion-card>
+    <ion-item>
+      <ion-label   color="dark"  ><ion-title class="holamundo">Realizar reservas: </ion-title></ion-label>
+    </ion-item>
+
+    <ion-row>
+      <ion-col sizeLg="12" sizeMd="9" sizeXs="9">
+    <ion-list>
+      <ion-item>
+        
+        <ion-select  class="holamundo"  aria-label="Objeto"  interface="popover"  placeholder="Selecciona tu comunidad" [compareWith]="compareWith" (ionChange)="handleChange($event)">
+          
+          <ion-select-option [value]="objeto" *ngFor="let objeto of datos ">Dirección: {{objeto.calle}}, {{objeto.numeracion}}  </ion-select-option>
+          
+        </ion-select>
+        
+      </ion-item>
+      <ion-item lines="none">
+        <ion-button expand="block"  (click)="mostrar_datos()">Continuar</ion-button>
+        
+      </ion-item>
+    </ion-list>
+
+    <!-- iF -->
+    <div *ngIf="esVacio">
+      <ion-item>
+        <ion-select  class="holamundo"  aria-label="Objeto"  interface="popover"  placeholder="Selecciona tu espacio común" [compareWith2]="compareWith2" (ionChange)="handleChange2($event)">
+          <ion-select-option [value]="objeto" *ngFor="let objeto of espaciosComunes ">Espacio Común: {{objeto.descripcion}} </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-button expand="block"  (click)="mostrar_datos()">Continuar</ion-button>
+        
+      </ion-item>
+    </div>
+    <!-- IF -->
+    <div ><!-- <*ngIf="esNull"> -->
+      <ion-item>
+        <ion-label class="holamundo"  aria-label="Objeto"  interface="popover"  placeholder="Selecciona tu espacio común" [compareWith3]="compareWith2" (ionChange)="handleChange3($event)">
+          <ion-datetime presentation="date-time" [preferWheel]="true"></ion-datetime>
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none" >
+        <ion-button expand="block"  (click)="test()">Continuar</ion-button>
+        
+      </ion-item>
+    </div>
+    <!-- IF -->
+  </ion-col>
+  </ion-row>  
+  </ion-card>
+
 </ion-header>
 
 
 
-<ion-content>
-  <ion-card>
-  <ion-item>
-    <ion-label   color="dark"  ><ion-title class="holamundo">Realizar reservas:</ion-title></ion-label>
-    
-  </ion-item>
-  <ion-item><ion-input class="holamundo "></ion-input></ion-item>
-</ion-card>
-</ion-content>
-<ion-content>
-  <ion-row>
-    <ion-col >
-      <ion-card *ngFor="let edificio of Edificios">
-        <ion-title [src]="edificio">{{edificio}}</ion-title>
-      </ion-card>
-    </ion-col>
-<ion-card>
 
-</ion-card>
-  </ion-row>
+<ion-content>
+ 
 </ion-content>
 
-  <!-- <app-explore-container name="Tab 1 page"></app-explore-container> -->
+<!-- <ion-datetime presentation="date-time" [preferWheel]="true"></ion-datetime> -->
 
