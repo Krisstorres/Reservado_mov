@@ -106,5 +106,40 @@ getReservas(){
 //Listar reservas (para validaciones )
 
 
+
+postReservas(){
+  let that=this
+
+
 }
+// let that = this;
+// const body = {
+//   email: correo,
+//   password: contra
+// };
+// return new Promise(resolve => {
+//   resolve(that.http.post(that.ruta, body).toPromise())
+// })
+
+
+}
+
+
+
+
+
 //API service manager 
+  /**json Requets reservas creacion =
+  
+  post method 
+  
+  {
+    "inicio","2023-06-24T18:47:00-04:00",
+    "duracion": "00:15:15",
+    "estado":"R",
+    "espacio":1,
+    "usuario":3//usuario id 
+
+  }
+
+  **/
