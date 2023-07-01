@@ -1,10 +1,14 @@
 import { Component,  OnInit} from '@angular/core';
-import { Router } from '@angular/router';
-import { LoadingController, ToastController } from '@ionic/angular';
+import { Router,NavigationExtras } from '@angular/router';
+import { IonInfiniteScrollContent, LoadingController, ToastController } from '@ionic/angular';
 import { ApiService } from '../services/api.service';
 import { Token } from '@angular/compiler';
 import * as jwt from 'jsonwebtoken';
 import { ObjectUnsubscribedError, elementAt } from 'rxjs';
+import { InfiniteScrollCustomEvent } from '@ionic/angular';
+import { Console } from 'console';
+
+
 
 @Component({
   selector: 'app-tab1',
@@ -13,7 +17,19 @@ import { ObjectUnsubscribedError, elementAt } from 'rxjs';
 })
 //Logica Pagina Tab1
   export class Tab1Page implements OnInit {
-//Variables 
+//Variables:
+  id:string='';
+  idComunidad:string='';
+  idEspacioComun:string='';
+  dateTime:string='';
+  hora:string='';
+  time:string='';
+  userID:string='';
+  comunidadID:string='';
+  minutos:any='';
+  mail:string='';
+// navigatiosExtras
+  storage_email=localStorage.getItem('email')
   mensaje:string='';
   corre:any;
   contra:any;
@@ -21,38 +37,35 @@ import { ObjectUnsubscribedError, elementAt } from 'rxjs';
   co:string='';
   con:string='';
   tok:string='';
-
-  id:string='';
-  owned_by :string='';
-
-  
-  
+// navigatiosExtras
+//almacenamiento de datos de endpoints backend 
   espaciosComunes:any=[];
   reserva:any=[];
   datos:any=[];
   input_datos:any=[];
+  misReservas:any=[]
+  userData:any=[];
+  almacenamiento:any=[];
+  items :any= []
+//almacenamiento de datos de endpoints backend 
+//datos de inputs 
   currentFood:any = undefined;
   currentFood2:any = undefined;
   currentFood3:any=undefined;
-  correo:string='';
+  currentFood4:any=undefined;
+//datos de inputs
   
-  idComunidad:string='';
-  idEspacioComun:string='';
+//mostrar datos 
   esNull:boolean =false;
-
-  reservaDate:any=[];
-  reservaHora:string='';
-  reservaFecha:string='';
-  reservaTimeZone:string='';
-
-  
-  dateTime:string='';
-  hora:string='';
+  estaValido:boolean=false;
   empty:boolean=false;
   esVacio:boolean=false;
+  estaValidado:boolean=false;
+  borrar_html:boolean=false;
+//mostra datos   
 //Variables 
 
-  //Inyeccion de componentes  y servicios 
+//Inyeccion de componentes  y servicios 
   constructor(
       
     private router:Router
@@ -74,12 +87,14 @@ ngOnInit() {
       this.con= this.contra.extras.state.contrasena.toString();
       this.tokken= this.router.getCurrentNavigation();
       this.tok= this.tokken.extras.state.token_a.toString();
+      var storage_email=localStorage.getItem('email')
       console.log('Usuario :'+this.co+"\nContraseña: "+this.con+"\nToken: "+this.tok);
+      
       //Sacando informacion del Navigation Extras 
       
     }
     catch(error){
-    console.log('Error de navigations extras '+error)      
+      console.log('Error de navigations extras '+error)      
     };
     try{
       this.prueba();
@@ -94,9 +109,9 @@ ngOnInit() {
 //Cargando Toast controller
 async presentToast(mensaje:string) {
   const toast = await this.toastController.create({
-  message: mensaje,
-  duration: 1500,
-  position: 'bottom'
+    message: mensaje,
+    duration: 1500,
+    position: 'bottom'
   });
   
   await toast.present();
@@ -105,8 +120,11 @@ async presentToast(mensaje:string) {
 
 //Funcion de carga de arranque para extraccion de datos 
 prueba(){
-this.getComunidad();
-this.getEspacios();
+  this.getComunidad();
+  this.getEspacios();
+  this.misReservaas();
+  this.getUserdata();
+  
 }
 //Funcion de carga de arranque para extraccion de datos 
 
@@ -129,7 +147,7 @@ test(){
 
 //Preseteo de mensajes de Loading controller 
 async loading_controll() {
-  console.log('Loading controller')
+  
   const loading = await this.loadingCtrl.create({
   message: 'Enviando Informacion !',
   duration: 3000,
@@ -137,15 +155,24 @@ async loading_controll() {
   
   loading.present();
   }
-  async loading_controlle() {
-    console.log('Loading controller')
-    const loading = await this.loadingCtrl.create({
-    message: 'No pudimos procesar la información :C',
-    duration: 3000,
+async loading_controlle() {
+ 
+  const loading = await this.loadingCtrl.create({
+  message: 'CREANDO RESERVA ..... ',
+  duration: 6000,
     });
     
     loading.present();
     }
+    async loading_controllee() {
+ 
+      const loading = await this.loadingCtrl.create({
+      message: 'CREANDO RESERVA ..... ',
+      duration: 6000,
+        });
+        
+        loading.present();
+        }
 //Preseteo de mensajes de Loading controller 
 
 //Funcion Listar Comunidades (APISERVICE)
@@ -158,8 +185,21 @@ async getComunidad(){
     
     const data:any =await that.api.listComunidad();
 
-    this.datos=data;
-    this.id=this.datos.id;
+    that.datos=data;
+    that.id=that.datos.id;
+    const largo = Object.keys(data).length;
+
+    for(let i = 0 ; i < largo; i++){
+      if(that.userID == that.datos[i].owned_by ){
+      let o = 0;
+      that.datos[o]=data[i]
+      console.log(" SE alamacenaron "+o+" Objetos "+this.datos);
+      o=o+1;
+      }else{
+        that.presentToast('Su usuario no posee cominidades registradas ! ')
+      }
+      
+    };
 
 
 
@@ -168,13 +208,6 @@ async getComunidad(){
   }
 }
 //Funcion Listar Comunidades (APISERVICE)
-
-//Funcion Listar Espacios Comunes (APISERVICE)
-get_espacio(){
-  
-  console.log("Select-options: "+this.input_datos);
-};
-//Funcion Listar Espacios Comunes (APISERVICE)
 
 //Funcion Obtencion de datos de html Options
 compareWith(o1:any, o2:any) {
@@ -187,33 +220,33 @@ handleChange(ev:any) {
   console.log('Input dataa '+this.input_datos["id"]);
   this.idComunidad=this.input_datos["id"];
 };
-  compareWith2(o1:any, o2:any) {
-    return o1 && o2 ? o1.id === o2.id : o1 === o2;
-  };
-
-  handleChange2(ev:any) {
+compareWith2(o1:any, o2:any) {
+  return o1 && o2 ? o1.id === o2.id : o1 === o2;
+};
+handleChange2(ev:any) {
     this.currentFood2 = ev.target.value;
     this.input_datos=this.currentFood2;
     this.idEspacioComun=this.currentFood2["id"];
-    console.log('Input dataa '+this.currentFood2);
-  };
-  //Funcion Obtencion de datos de html Options
-
-
-  //Funcion Obtencion de datos de html dateTime
-  compareWith3(o1:any, o2:any) {
+};
+//Funcion Obtencion de datos de html Options
+//Funcion Obtencion de datos de html dateTime
+compareWith3(o1:any, o2:any) {
     return o1 && o2 ? o1.id === o2.id : o1 === o2;
-  };
-
-  handleChange3(ev:any) {
+};
+handleChange3(ev:any) {
     this.currentFood3 = ev.target.value;
     this.dateTime=this.currentFood3;
     this.dateTime=this.dateTime; 
-    
- 
-    
-    console.log('Input dataa '+this.dateTime.replace('T',' '))
-  };
+};
+compareWith4(o1:any, o2:any) {
+  return o1 && o2 ? o1.id === o2.id : o1 === o2;
+};
+handleChange4(ev:any) {
+  this.currentFood4 = ev.target.value;
+  this.minutos=this.currentFood4;
+  this.minutos=this.minutos; 
+  console.log('Minutos: '+this.minutos)
+};
 //Funcion Obtencion de datos de html dateTime
 
 
@@ -236,14 +269,15 @@ async getEspacios(){
 
 
 //Funcion de validacion de ingreso de datos, corrector de flujo de informacion 
-mostrar_datos(){
+async mostrar_datos(){
+  
   if(this.idComunidad != ''){
     this.presentToast('Seleccionaste una comunidad '+this.currentFood.nombre)
   
     
     this.esVacio=true;
   }else{
-    this.presentToast('Debes seleccionar una comunidad para continuar ')
+    this.presentToast('Debes seleccionar una comunidad para continuar !')
   }
   if(this.idEspacioComun !=''){
     this.presentToast('Seleccionaste el espacio común ='+this.currentFood2["descripcion"]);
@@ -251,79 +285,150 @@ mostrar_datos(){
 
   }
   else{
-    this.presentToast('Debes seleccionar un espacio comun para continuar ');
+    this.presentToast('Debes seleccionar un espacio comun para continuar !');
 
   }
+  if(this.time == ''){
+    this.presentToast('Debes seleccionar una fecha y hora de reserva para continuar ! ')
+  }
+  
+  
 
+}
+async moostrar_datos(){
+  if(this.esNull){
+  if (await this.TimeValidator() == 'Periodo disponible'){
+    this.presentToast('Periodo disponible !! ')
+    this.empty=true;
+  }else if(await this.TimeValidator() == 'Periodo ocupado'){
+    this.empty=false;
+  }
+  if(this.empty == true){
+    this.estaValido = true;
+  }
+}
+}
+validarMinutos(){
+
+  if(this.minutos != ''){
+    this.transformTimeToHours(this.minutos)
+    this.minutos=this.transformTimeToHours(this.minutos);
+    console.log('Duracion formateada '+this.transformTimeToHours(this.minutos))
+    this.estaValidado=true; 
+    
+    
+  }
 }
 //Funcion de validacion de ingreso de datos, corrector de flujo de informacion 
 
 //Validador de tiempo 
 async TimeValidator(){
-  console.log('Date&TimeSelector html = '+this.dateTime)
+  // console.log('Date&TimeSelector html = '+this.dateTime)
   const date = new Date(this.dateTime);
   const timezone = date;
   const sysdate = this.formatDate(new Date(this.dateTime));
-  console.log('Fecha formateadaa '+sysdate);
+  
+  // console.log('Fecha formateadaa '+sysdate);
 
 
   const that=this;
+  that.time=sysdate;
+  if( sysdate.toString() == '0NaN-NaN-NaNTNaN:NaN:NaN'){
+    
+  }else{
+  that.presentToast('DEBE SELECCIONAR UN PERIDO PARA CONITINUAR ')
+}
   try{
     const response :any=await that.api.getReservas();
     const largos=Object.keys(response).length;
     
     if(largos != 0){
       that.reserva=response;
-      console.log('Reserva = {')
-      console.log('ID     :    '+that.reserva[0].id)
-      console.log('Espacio:   '+that.reserva[0].espacio)
-      console.log('Usuario:   '+that.reserva[0].usuario)
-      console.log('Inicio :    '+that.reserva[0].inicio)
-      console.log('Fecha  : '+that.reserva[0].inicio.toString().split('T')[0])
-      console.log('Hora   : '+that.reserva[0].inicio.toString().split('T')[1].split('.')[0])
-      console.log('Time_Zone   : '+that.reserva[0].inicio.toString().split('T')[1].split('.')[1])
-      console.log('Duracion:    '+that.reserva[0].duracion)
-      console.log('Invitados:   '+that.reserva[0].invitados)
-      console.log('Sysdate value = {'+sysdate.toString().split('T')[1].split('.')[0]+'}')
+      // console.log('Reserva = {')
+      // console.log('ID     :    '+that.reserva[0].id)
+      // console.log('Espacio:   '+that.reserva[0].espacio)
+      // console.log('Usuario:   '+that.reserva[0].usuario)
+      // console.log('Inicio :    '+that.reserva[0].inicio)
+      // console.log('Fecha  : '+that.reserva[0].inicio.toString().split('T')[0])
+      // console.log('Hora   : '+that.reserva[0].inicio.toString().split('T')[1].split('.')[0])
+      // console.log('Time_Zone   : '+that.reserva[0].inicio.toString().split('T')[1].split('.')[1])
+      // console.log('Duracion:    '+that.reserva[0].duracion)
+      // console.log('Invitados:   '+that.reserva[0].invitados)
+      // console.log('Sysdate value = {'+sysdate.toString().split('T')[1].split('.')[0]+'}')
       
-      console.log('Formato de fecha entregado a variables de suma: '+sysdate.toString().split('T')[1].split('.')[0].replace(':',',').replace(':',','))
-      console.log('} ')
+      // console.log('Formato de fecha entregado a variables de suma: '+sysdate.toString().split('T')[1].split('.')[0].replace(':',',').replace(':',','))
+      // console.log('} ')
+
       for(let i = 0 ; i<largos;i++){
         var idReserva=that.reserva[i].id;
         var horaReservas=that.reserva[i].inicio.toString().split('T')[1].split('.')[0].replace(':',',').replace(':',',').split('-')[0].split('-')[0]      ;
         var duracionReserva=that.reserva[i].duracion.toString().replace(':',',').replace(':',',');
         var horaUsuario=sysdate.toString().split('T')[1].split('.')[0].replace(':',',').replace(':',',') ;
         var horaTotal=that.sumarHoras(horaReservas,duracionReserva);
+        
+        
+        var horaActual=that.formatDate(new Date())
+        // console.log('Fecha actual '+horaActual.toString().split('.')[0])
+        // console.log('Fecha seleccionada: '+sysdate.toString().split('.')[0])
       //    console.log("Inicio de reserva :"+that.reserva[i].inicio)
-        if(that.reserva[0].inicio.toString().split('T')[0] == sysdate.toString().split('T')[0]){
-          console.log('Dia con reservas, realizando validación de hora ');
-          if(  horaUsuario >= horaReservas && horaUsuario <= horaTotal ){
-            console.log('ID: '+idReserva)
-            console.log('Hora reservas :'+horaReservas);
-            console.log('Duracion de reserva: '+duracionReserva);
-            console.log('Hora usuario: '+horaUsuario);
-            console.log('Hora total: '+horaTotal);
-            console.log('Periodo ocupado !!!!!!');
+      if(horaActual.toString().split('.')[0] > sysdate.toString().split('.')[0]){
+        if(that.reserva[i].inicio.toString().split('T')[0] == sysdate.toString().split('T')[0]){
+          // console.log('Dia con reservas, realizando validación de hora ');
+          that.presentToast('Dia con reservas, realizando validación de hora ');
+          if(  horaUsuario >= horaReservas && horaUsuario <= horaTotal){
+            // console.log('ID: '+idReserva)
+            // console.log('Hora reservas :'+horaReservas);
+            // console.log('Duracion de reserva: '+duracionReserva);
+            // console.log('Hora usuario: '+horaUsuario);
+            // console.log('Hora total: '+horaTotal);
+            // console.log('Periodo ocupado !!!!!!');
+            that.presentToast('Periodo seleccionado ocupado ! ')
+          this.mensaje='Periodo ocupado';
+            return this.mensaje;
             
+            
+          }else{
+            that.dateTime=sysdate;
+            that.presentToast('Periodo disponible');
             
           }
 
+        }else{
+          this.mensaje='Periodo disponible'
+          that.dateTime=sysdate;
+          that.presentToast('Periodo disponible !! ')
+          return this.mensaje;
         }
-        else{
+      }else{
 
-        console.log('hora y fecha disponible ')
+        // console.log('hora y fecha disponible ')
+        this.mensaje='Periodo disponible'
+        that.dateTime=sysdate;
+        return this.mensaje;
         }
+      
+      
       }
 
       
+
+      this.mensaje='Periodo disponible'
+      that.dateTime=sysdate;
+      
     }else{
     console.log('Error, no se obtuvieron datos ')    
+    this.mensaje='Error no se obtuvieron datos ';
     };
 
     }
+  
   catch(error){
     console.log('Api error : '+error+' Retry pls ;)')
+    this.mensaje='Error de Api'; 
   };
+    
+
+  return this.mensaje;
 
 };
 
@@ -416,7 +521,228 @@ sumarHoras(hora1:any,hora2:any){
   return fechaFormateada;
 
 }
+async upLoadReserva(){
+const that=this;
+try{
 
+}catch(e){
+  console.log("Error: "+e)
+  that.presentToast('Error de api recargue app PLZ TT_TT '+e)
+}
+}
+async misReservaas(){
+const that= this; 
+try{
+
+const respuestas: any=await that.api.getReservas();
+const largoRespuesta= Object.keys(respuestas).length
+if (largoRespuesta >=1){
+  that.misReservas=respuestas;
+  var num = 0;
+  const largo = Object.keys(this.misReservas).length;
+  for(let i = 0; i < largo; i++  ){
+    
+    if(parseInt(that.misReservas[i].usuario) === parseInt('3')){
+      that.almacenamiento[num]=that.misReservas[i];
+      num=num+1;
+      num=num;
+    }
+  }
+  console.log('Mensaje : Funcionó');
+
+  for(let i=0; i < largoRespuesta; i++){
+ 
+     if(respuestas[i].usuario == that.userID){
+   
+      
+      
+   
+
+      console.log('ESPACIO COMÚN EXTRAIDO CON EXITO ! '+that.misReservas[i])
+     }
+  }
+  
+  console.log('Reservas '+that.misReservas)
+
+}else{
+  console.log('Error: Extraccion de datos  ')
+}
+}catch(e){
+  console.log('Error api: '+e)
+}
+}
+
+
+async getUserdata(){
+  const that= this;
+  try{
+    const respuesta:any = await that.api.getUsuario();
+    const largo = Object.keys(respuesta).length;
+    that.userData=respuesta;
+    console.log(' Menssage: Funcionó ! ')
+
+    for(let i = 0 ; i < largo; i++){
+
+      if( that.userData[i].email.toString()  != that.storage_email   ){
+        console.log('no se guarda')
+      }else{
+        that.userID=that.userData[i].id;
+        console.log('  ')
+        console.log('Se GUARDÓ')
+        console.log('Correo guardado: '+that.userData[i].email+'\nNumero Objeto: '+i+"\nID Usuario: "+that.userID)
+        console.log('  ')
+      }
+    }
+     
+  }catch(e){
+    console.log('Error api: '+e )
+  }
+}
+async makeAReserva(){
+  const that = this ; 
+  try{
+    
+    var a=0;
+    const date=that.dateTime.toString();
+    const duracion=this.minutos;
+    const estado='R';
+    const idEspacio=this.idEspacioComun;
+    const ownedID=this.userID;
+    console.log('Datos enviados:\ninicio reserva: '+date+"\nDuracion: "+duracion+"\nEstado: "+estado+"\nID espacio: "+idEspacio+"\nID usuario: "+ownedID)
+      
+    const response:any = await that.api.postReservas(date,duracion,estado,idEspacio,ownedID);
+    const largo=Object.keys(response).length;    
+    if(largo >= 5 ){
+      console.log(' Message : Funcionó  ');
+      
+      that.loading_controllee();
+      that.maiin();
+      that.presentToast('Reserva creada exitosamente ');
+      that.borrar_html=true;
+    }else{
+  
+
+    that.presentToast('Datos incompletos')}
+    
+
+
+  }catch(e){
+    console.log(e)
+  }
+}
+transformTimeToHours(time : any) {
+  const var1=new Date();
+  time.toString();
+  
+
+
+
+  if(time == '15 Minutos'){
+    var1.setHours(parseInt('00'),parseInt('15'),parseInt('00'));
+    
+    
+    const sumaHora=var1.getHours();
+    const sumaMinutos= var1.getMinutes();
+    const sumaSegundos=var1.getSeconds();
+    
+    const sumaCompleta=new Date();
+    sumaCompleta.setHours(sumaHora,sumaMinutos,sumaSegundos);
+    const fechaFormateada=sumaCompleta.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    return fechaFormateada;
+
+  }else if(time == '30 Minutos'){
+    var1.setHours(parseInt('00'),parseInt('30'),parseInt('00'));
+    
+    
+    const sumaHora=var1.getHours();
+    const sumaMinutos= var1.getMinutes();
+    const sumaSegundos=var1.getSeconds();
+    
+    const sumaCompleta=new Date();
+    sumaCompleta.setHours(sumaHora,sumaMinutos,sumaSegundos);
+    const fechaFormateada=sumaCompleta.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    return fechaFormateada;
+    
+  }else if(time == '1 Hora'){
+    var1.setHours(parseInt('01'),parseInt('00'),parseInt('00'));
+    
+    
+    const sumaHora=var1.getHours();
+    const sumaMinutos= var1.getMinutes();
+    const sumaSegundos=var1.getSeconds();
+    
+    const sumaCompleta=new Date();
+    sumaCompleta.setHours(sumaHora,sumaMinutos,sumaSegundos);
+    const fechaFormateada=sumaCompleta.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    return fechaFormateada;
+    
+  }else if(time == '2 Horas'){
+    var1.setHours(parseInt('02'),parseInt('00'),parseInt('00'));
+    
+    
+    const sumaHora=var1.getHours();
+    const sumaMinutos= var1.getMinutes();
+    const sumaSegundos=var1.getSeconds();
+    
+    const sumaCompleta=new Date();
+    sumaCompleta.setHours(sumaHora,sumaMinutos,sumaSegundos);
+    const fechaFormateada=sumaCompleta.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    return fechaFormateada;
+    
+  }
+  
+
+
+  
+  return 
+
+}
+
+
+
+ waitWithSetTimeout(milliseconds: number): Promise<void> {
+  return new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, milliseconds);
+  });
+}
+
+async  maiin() {
+  const that=this;
+  await that.waitWithSetTimeout(3000); // Esperar 3 segundos (3000 milisegundos)
+  console.log("Después de esperar 3 segundos.");
+}
+
+
+
+Navegar() { 
+  const parametros: NavigationExtras={
+    state:{
+   correo: this.co,
+   contra:this.con,
+   token : this.tok
+
+
+
+    }
+  }
+  this.router.navigate(['Fabs/tab3'],parametros)
+
+
+}
 //Logica Pagina Tab1
   }
 
+
+  /**
+ {
+    "inicio":"2023-07-01T06:00:00-04:00",
+    "duracion": "00:15:00",
+    "estado" : "R",
+    "espacio" : 1,
+    "usuario":3 
+
+}
+
+  **/

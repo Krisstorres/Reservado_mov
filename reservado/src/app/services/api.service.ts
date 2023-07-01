@@ -14,7 +14,8 @@ export class ApiService {
   rutaComunidad='http://34.125.248.124:8000/api/comunidades';
   rutaEspacioComun='http://34.125.248.124:8000/api/espaciocomun/'
   rutaDetalleEspacioComun='http://34.125.248.124:8000/api/ecdetail/'
-  rutaConsultarReservas='http://34.125.248.124:8000/api/reservas';
+  rutaConsultarReservas='http://34.125.248.124:8000/api/reservas/';
+  rutaUsuario='http://34.125.248.124:8000/api/usuario/'
   validador: boolean = false
   
   constructor(
@@ -107,10 +108,28 @@ getReservas(){
 
 
 
-postReservas(){
-  let that=this
+postReservas(inicioo:string,duracionn:string,estadoo:string,espacioo:string,usuarioo:string){
+  const that=this
+  
+  const body = {
+    inicio   :  inicioo,
+    duracion :  duracionn,
+    estado   :  estadoo,
+    espacio  :  espacioo,
+    usuario  :  usuarioo
+  };
+  return new Promise(resolve => {
+    resolve(that.http.post(that.rutaConsultarReservas, body).toPromise())
+  })
 
-
+}
+getUsuario(){
+  let that= this; 
+  
+  return new Promise(resolve =>{
+    resolve(that.http.get(that.rutaUsuario).toPromise())
+  });
+  
 }
 // let that = this;
 // const body = {
@@ -129,17 +148,14 @@ postReservas(){
 
 
 //API service manager 
-  /**json Requets reservas creacion =
-  
-  post method 
-  
-  {
-    "inicio","2023-06-24T18:47:00-04:00",
-    "duracion": "00:15:15",
-    "estado":"R",
-    "espacio":1,
-    "usuario":3//usuario id 
+/**
+ {
+    "inicio":"2023-07-01T06:00:00-04:00",
+    "duracion": "00:15:00",
+    "estado" : "R",
+    "espacio" : 1,
+    "usuario":3 
 
-  }
+}
 
   **/

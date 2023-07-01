@@ -42,6 +42,10 @@ const routes: Routes = [
   {
     path: 'tab44',
     loadChildren: () => import('./tab4/tab4.module').then( m => m.Tab4PageModule)
+  },
+  {
+    path: 'fix',
+    loadChildren: () => import('./pages/fix/fix.module').then( m => m.FixPageModule)
   }
 
 ];

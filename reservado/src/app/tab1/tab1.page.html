@@ -3,13 +3,17 @@
     <ion-title class="text">Reservado.com</ion-title>
     <ion-title class="textR">Home</ion-title>
   </ion-toolbar>
-  <ion-card>
+</ion-header>
+
+<ion-content>
+
+  <ion-card class="card-responsive">
     <ion-item>
-      <ion-label   color="dark"  ><ion-title class="holamundo">Realizar reservas: </ion-title></ion-label>
+      <ion-label   color="dark"  ><ion-title class="holamundoo">Realizar reservas: </ion-title></ion-label>
     </ion-item>
 
     <ion-row>
-      <ion-col sizeLg="12" sizeMd="9" sizeXs="9">
+      <ion-col sizeLg="12" sizeMd="12" sizeXs="12" class="contenedor-reservas">
     <ion-list>
       <ion-item>
         
@@ -21,11 +25,11 @@
         
       </ion-item>
       <ion-item lines="none">
-        <ion-button expand="block"  (click)="mostrar_datos()">Continuar</ion-button>
+        <ion-button class="botton" expand="block"  (click)="mostrar_datos()" *ngIf= "!esVacio">Continuar</ion-button>
         
       </ion-item>
     </ion-list>
-
+    <div *ngIf="!borrar_html">
     <!-- iF -->
     <div *ngIf="esVacio">
       <ion-item>
@@ -34,51 +38,106 @@
         </ion-select>
       </ion-item>
       <ion-item lines="none">
-        <ion-button expand="block"  (click)="mostrar_datos()">Continuar</ion-button>
+        <ion-button class="botton" expand="block"  (click)="mostrar_datos()" *ngIf="!esNull">Continuar</ion-button>
         
       </ion-item>
     </div>
 
+
+
     <!-- IF -->
-    <!-- *ngIf="esNull" -->
-    <div  >
-      <ion-item>
-        <ion-label class="holamundo"  aria-label="Objeto"  interface="popover"  placeholder="Selecciona tu espacio común" [compareWith3]="compareWith2" (ionChange)="handleChange3($event)">
-          <ion-datetime presentation="date-time" [preferWheel]="true"></ion-datetime>
+    <div   *ngIf="esNull">
+      <ion-item >
+        <ion-label class="holamundo" aria-label="Objeto"  interface="popover"  placeholder="Selecciona tu espacio común" [compareWith3]="compareWith2" (ionChange)="handleChange3($event)">
+          <ion-datetime-button datetime="datetime" ></ion-datetime-button>
+          <ion-modal [keepContentsMounted]="true" [compareWith3]="compareWith3" (ionChange)="handleChange3($event)">
+            <ng-template>
+              <ion-datetime id="datetime"></ion-datetime>
+            </ng-template>
+          </ion-modal>
         </ion-label>
       </ion-item>
-      <ion-item lines="none" >
-        <ion-button expand="block"  (click)="TimeValidator()">Continuar</ion-button>
-        
+      <ion-item  lines="none"  *ngIf="!estaValido">
+        <ion-button class="botton" expand="block"  (click)="moostrar_datos()" >Continuar</ion-button>
       </ion-item>
     </div>
     <!-- IF -->
 
+
+    <div *ngIf="estaValido">
+      <ion-list>
+        <ion-item><ion-label  class="holamundo"  aria-label="Objeto"  interface="popover">
+          <ion-select
+            interface="popover"
+            toggleIcon="add"
+            expandedIcon="remove"
+            aria-label="fruit"
+            placeholder="Selecciona la duracion de tu reserva"
+            [keepContentsMounted]="true" 
+            [compareWith4]="compareWith4" 
+            (ionChange)="handleChange4($event)"
+            class="time" 
+          >
+            <ion-select-option value="15 Minutos">15 Minutos</ion-select-option>
+            <ion-select-option value="30 Minutos">30 Minutos</ion-select-option>
+            <ion-select-option value="1 Hora">1 Horas </ion-select-option>
+            <ion-select-option value="2 Horas">2 Horas </ion-select-option>
+        
+          </ion-select>
+        </ion-label>
+        </ion-item>
+      </ion-list>
+      <div>
+      <ion-item  lines="none" *ngIf="!estaValidado">
+        <ion-button class="botton" expand="block"  (click)="validarMinutos()" >Continuar</ion-button>
+        
+      </ion-item>
+    </div>
+    </div>
+
+
+
     <!-- IF -->
-    <div  *ngIf="empty">
+    <div  *ngIf="estaValidado">
       <ion-item>
         <ion-label class="holamundo"  aria-label="Objeto"  interface="popover"  placeholder="Selecciona la fecha y hora de tu reserva " [compareWith3]="compareWith2" (ionChange)="handleChange3($event)">
-          <ion-datetime presentation="date-time" [preferWheel]="true"></ion-datetime> ingresa tu h
+          <ion-button class="botton" expand="block" (click)="makeAReserva()">Reservar ! </ion-button>
         </ion-label>
       </ion-item>
       <ion-item lines="none" >
-        <ion-button expand="block"  (click)="TimeValidator()">Continuar</ion-button>
+         
         
       </ion-item>
     </div>
-    <!-- IF -->
+  </div>
+  <!-- IF -->
+
   </ion-col>
-  </ion-row>  
+
+</ion-row>  
+
   </ion-card>
 
-</ion-header>
-
+</ion-content>
 
 
 
 <ion-content>
- 
+
+  <ion-label   color="dark"  ><ion-title class="holamundoo">Tus  reservas: </ion-title></ion-label>
+
+<ion-div>
+<ion-row>
+  <ion-col sizeLg="6" sizeMd="6" sizeXs="12" *ngFor="let objeto of almacenamiento">
+    <ion-card class="card" >
+      <img src="assets\images\edficio{{objeto.id}}.svg" alt="">
+      <div class="card-title">Fecha de reserva: {{objeto.inicio.toString().split('T')[0]}}</div>
+      <div class="card-title">Hora de reserva: {{objeto.inicio.toString().split('T')[1].split('.')[0]}}</div>
+      <ion-button color="primary" expand="block"  (click)="Navegar()" >Iniciar reserva</ion-button>
+    </ion-card>
+  </ion-col>
+</ion-row>
+</ion-div>
 </ion-content>
 
-<!-- <ion-datetime presentation="date-time" [preferWheel]="true"></ion-datetime> -->
 

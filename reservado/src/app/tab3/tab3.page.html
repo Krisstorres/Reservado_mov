@@ -1,10 +1,10 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Mis reservas
-    </ion-title>
+<ion-header>
+  <ion-toolbar class= lila color="reservado">
+    <ion-title class="text">Reservado.com</ion-title>
+    <ion-title class="textR">Reservas</ion-title>
   </ion-toolbar>
 </ion-header>
+
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
@@ -14,4 +14,21 @@
   </ion-header>
 
   <app-explore-container name="Tab 3 page"></app-explore-container>
+</ion-content>
+<ion-content>
+
+  <ion-label   color="dark"  ><ion-title class="holamundoo">Tus  reservas: </ion-title></ion-label>
+
+<ion-div>
+<ion-row>
+  <ion-col sizeLg="6" sizeMd="6" sizeXs="12" *ngFor="let objeto of almacenamiento">
+    <ion-card class="card" >
+      <img src="assets\images\edficio{{objeto.id}}.svg" alt="">
+      <div class="card-title">Fecha de reserva: {{objeto.inicio.toString().split('T')[0]}}</div>
+      <div class="card-title">Hora de reserva: {{objeto.inicio.toString().split('T')[1].split('.')[0]}}</div>
+      <ion-button color="primary" expand="block"  (click)="Navegar()" >Iniciar reserva</ion-button>
+    </ion-card>
+  </ion-col>
+</ion-row>
+</ion-div>
 </ion-content>

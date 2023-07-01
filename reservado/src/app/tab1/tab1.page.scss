@@ -24,8 +24,12 @@ ion-toolbar{
     background-color: var(--ion-color-reservado);
 }
 .holamundo{
-    font-size: 30px;
+    font-size: 15px;
     text-align: start;
+}   
+.holamundoo{
+    font-size: 30px;
+    text-align: center;
 }   
 
 .slabel-option{
@@ -34,3 +38,42 @@ ion-toolbar{
     font-size: 100px;
 
 }
+.contenedor-reservas{
+    align-items: center;
+    text-align: center;
+}
+.card-responsive{
+    // height: 600px;
+    background-color: white;
+    border-radius: 5.5%;
+
+}
+.time{
+    align-items:  center   ;
+    text-align: center;
+    justify-content: center;
+    flex: content;
+    
+}
+.card-title{
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 8px;
+
+}
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .card img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+  }
+
+  
+
