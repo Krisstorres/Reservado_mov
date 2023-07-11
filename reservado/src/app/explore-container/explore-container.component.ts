@@ -12,7 +12,8 @@ export class ExploreContainerComponent {
   images=[
     'assets/images/Slide1.svg',
     'assets/images/Slide2.svg',
-    'assets/images/Slide3.svg'
+    'assets/images/Slide3.svg',
+    'assets/images/Slide4.svg'
   ]
 
   @Input() name?: string;

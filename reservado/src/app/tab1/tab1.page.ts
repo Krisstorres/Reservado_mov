@@ -1,12 +1,11 @@
-import { Component,  OnInit} from '@angular/core';
+import { Component,  OnInit, ViewChild, ElementRef,Input} from '@angular/core';
 import { Router,NavigationExtras } from '@angular/router';
-import { IonInfiniteScrollContent, LoadingController, ToastController } from '@ionic/angular';
+import {  LoadingController, ToastController } from '@ionic/angular';
 import { ApiService } from '../services/api.service';
 import { Token } from '@angular/compiler';
 import * as jwt from 'jsonwebtoken';
-import { ObjectUnsubscribedError, elementAt } from 'rxjs';
-import { InfiniteScrollCustomEvent } from '@ionic/angular';
-import { Console } from 'console';
+import { AlertController } from '@ionic/angular';
+import {Swiper} from 'swiper'
 
 
 
@@ -17,7 +16,14 @@ import { Console } from 'console';
 })
 //Logica Pagina Tab1
   export class Tab1Page implements OnInit {
+
+  @ViewChild ('swiper')
+  swiperRef: ElementRef | undefined;
+  swiper?: Swiper;
+
 //Variables:
+  menuType: string = 'overlay';
+  nombre_usuario:string='';
   id:string='';
   idComunidad:string='';
   idEspacioComun:string='';
@@ -34,6 +40,7 @@ import { Console } from 'console';
   corre:any;
   contra:any;
   tokken:any;
+  nombr:any;
   co:string='';
   con:string='';
   tok:string='';
@@ -45,8 +52,10 @@ import { Console } from 'console';
   input_datos:any=[];
   misReservas:any=[]
   userData:any=[];
+  userDataFiltered:any=[];
   almacenamiento:any=[];
   items :any= []
+  nombresEspacios:any=[];
 //almacenamiento de datos de endpoints backend 
 //datos de inputs 
   currentFood:any = undefined;
@@ -62,6 +71,7 @@ import { Console } from 'console';
   esVacio:boolean=false;
   estaValidado:boolean=false;
   borrar_html:boolean=false;
+  
 //mostra datos   
 //Variables 
 
@@ -72,6 +82,7 @@ import { Console } from 'console';
    ,private api:ApiService
    ,private toastController:ToastController
    ,private loadingCtrl: LoadingController
+   ,private alert: AlertController
               
               ) {};
 //Inyeccion de componentes  y servicios               
@@ -87,8 +98,17 @@ ngOnInit() {
       this.con= this.contra.extras.state.contrasena.toString();
       this.tokken= this.router.getCurrentNavigation();
       this.tok= this.tokken.extras.state.token_a.toString();
+      this.nombr=this.router.getCurrentNavigation();
+      this.nombre_usuario=this.nombr.extras.state.nombre.toString();
+      console.log('Nombre usuario : '+this.nombre_usuario)
       var storage_email=localStorage.getItem('email')
       console.log('Usuario :'+this.co+"\nContraseña: "+this.con+"\nToken: "+this.tok);
+      try{
+        this.presentAlert()
+
+      }catch(e){
+        console.log('Error en obtencion de nombres por navigatios extras ! ')
+      }
       
       //Sacando informacion del Navigation Extras 
       
@@ -104,6 +124,7 @@ ngOnInit() {
 
     };
 };
+@Input() name?: string;
 //Funciones y variables de arranque 
 
 //Cargando Toast controller
@@ -431,7 +452,9 @@ async TimeValidator(){
   return this.mensaje;
 
 };
-
+getEspacioComun(){
+  
+}
 formatDate(date: Date): string {
   const year = date.getFullYear().toString().padStart(4, '0');
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -571,8 +594,6 @@ if (largoRespuesta >=1){
   console.log('Error api: '+e)
 }
 }
-
-
 async getUserdata(){
   const that= this;
   try{
@@ -587,9 +608,13 @@ async getUserdata(){
         console.log('no se guarda')
       }else{
         that.userID=that.userData[i].id;
+        that.userDataFiltered[0]=that.userData[i];
         console.log('  ')
         console.log('Se GUARDÓ')
         console.log('Correo guardado: '+that.userData[i].email+'\nNumero Objeto: '+i+"\nID Usuario: "+that.userID)
+        
+        
+        
         console.log('  ')
       }
     }
@@ -698,8 +723,6 @@ transformTimeToHours(time : any) {
 
 }
 
-
-
  waitWithSetTimeout(milliseconds: number): Promise<void> {
   return new Promise<void>((resolve) => {
     setTimeout(() => {
@@ -713,8 +736,6 @@ async  maiin() {
   await that.waitWithSetTimeout(3000); // Esperar 3 segundos (3000 milisegundos)
   console.log("Después de esperar 3 segundos.");
 }
-
-
 
 Navegar() { 
   const parametros: NavigationExtras={
@@ -731,6 +752,35 @@ Navegar() {
 
 
 }
+
+async presentAlert() {
+  const alert = await this.alert.create({
+    header: 'Notificación',
+    subHeader: 'Bienvenido: \n'+this.nombre_usuario.split('.')[0]+'\t',
+  
+    message: 'Disfruta de reservado.com',
+    buttons: ['navegar'],
+  });
+
+  await alert.present();
+}
+
+
+  
+swiperReady(){
+  this.swiper=this.swiperRef?.nativeElement.swiper;
+}
+goNext(){
+  this.swiper?.slideNext();
+}
+goPrev(){
+  this.swiper?.slidePrev();
+}
+swiperSlideChanged(e:any){
+  console.log('changed',e);
+}
+
+
 //Logica Pagina Tab1
   }
 

@@ -17,7 +17,7 @@ export class ApiService {
   rutaConsultarReservas='http://34.125.248.124:8000/api/reservas/';
   rutaUsuario='http://34.125.248.124:8000/api/usuario/'
   validador: boolean = false
-  
+  logIn:boolean=false;
   constructor(
     private http: HttpClient
 
@@ -25,6 +25,13 @@ export class ApiService {
   ) {
 
   }
+
+//canActivate
+canActivate(){
+  
+}
+
+//canActivate
 
 //Validar Credenciales 
   ValidateApiService(correo: string, contra: string) {

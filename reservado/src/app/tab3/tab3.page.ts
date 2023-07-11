@@ -80,9 +80,9 @@ export class Tab3Page {
       this.corre= this.router.getCurrentNavigation();
       this.co= this.corre.extras.state.correo.toString();
       this.contra= this.router.getCurrentNavigation();
-      this.con= this.contra.extras.state.contrasena.toString();
+      this.con= this.contra.extras.state.contra.toString();
       this.tokken= this.router.getCurrentNavigation();
-      this.tok= this.tokken.extras.state.token_a.toString();
+      this.tok= this.tokken.extras.state.token.toString();
       var storage_email=localStorage.getItem('email')
       console.log('Usuario :'+this.co+"\nContraseña: "+this.con+"\nToken: "+this.tok);
       

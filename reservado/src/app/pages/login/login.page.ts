@@ -7,6 +7,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { ToastController } from '@ionic/angular';
 import { NavigationExtras } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
+import { ExploreContainerComponent } from 'src/app/explore-container/explore-container.component';
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -16,6 +17,9 @@ export class LoginPage implements OnInit {
   email:string="";
   pass:string=""; 
   token:string='';
+  userData:any=[];
+  userID:string='';
+  nombre_usuario:string='';
   storage_email=localStorage.setItem('email','')
   storage_pass=localStorage.setItem('password','')
   storage_token=localStorage.setItem('token','')
@@ -26,30 +30,39 @@ export class LoginPage implements OnInit {
     ,private loadingCtrl: LoadingController
     
     ) {
-console.log ('pagina iniciada')
+  console.log ('pagina iniciada')
 }
 
 ngOnInit() {
 }
+async loading_controll() {
+  console.log('Loading controller')
+  const loading = await this.loadingCtrl.create({
+  message: 'Validando información',
+  duration: 3000,
+});
+
+loading.present();
+}
 async presentToast(mensaje:string) {
-const toast = await this.toastController.create({
-message: mensaje,
-duration: 1500,
-position: 'bottom'
+  const toast = await this.toastController.create({
+  message: mensaje,
+  duration: 1500,
+  position: 'bottom'
 });
 
 await toast.present();
 }
 navegar(){
 if (this.email =='' || this.pass == ''){
-console.log('Porfavor rellenar campos antes de enviar datos ')
-this.presentToast('Porfavor rellenar campos antes de enviar datos ')
+  console.log('Porfavor rellenar campos antes de enviar datos ')
+  this.presentToast('Porfavor rellenar campos antes continuar ')
 
 }else{
-console.log('datos envados correctamente')
-this.presentToast('datos envados correctamente')
-this.loading_controll()
-this.passValidator(this.email,this.pass)  
+  console.log('datos envados correctamente')
+  
+  this.loading_controll()
+  this.passValidator(this.email,this.pass)  
 }
 
 
@@ -60,46 +73,72 @@ const that=this;
 
 try {
 
-let login:any =await  that.api.ValidateApiService(email, pass);
-that.else_msj=login
-if(login['message'] === 'Authentication successful') {
-console.log(login,'Funncionoooooooo');
-//asignado valor a de token  a variable 
-that.token=login['access_token'];
-//asignado valor a de token  a variable 
-//asignando valor de datos a variables 
-console.log("Token :"+that.token) 
-that.storage_email=localStorage.setItem('email',email)
-that.storage_pass=localStorage.setItem('password',pass)
-that. storage_token=localStorage.setItem('token',that.token)
-const parametros: NavigationExtras={
-  state:{
-    correo:email,
-    contrasena:pass,
-    token_a:that.token
-  }
-}
-that.router.navigate(['Fabs/tab1'],parametros)//Reemplazar con 'Fabs'
+  let login:any =await  that.api.ValidateApiService(email, pass);
+  that.else_msj=login
+  if(login['message'] === 'Authentication successful') {
+    console.log(login,'Funncionoooooooo');
+    
+    //asignado valor a de token  a variable 
+    that.token=login['access_token'];
+    //asignado valor a de token  a variable 
+    //asignando valor de datos a variables 
+    console.log("Token :"+that.token) 
+    that.storage_email=localStorage.setItem('email',email)
+    that.storage_pass=localStorage.setItem('password',pass)
+    that. storage_token=localStorage.setItem('token',that.token)
+    const parametros: NavigationExtras={
+      state:{
+        correo : email,
+        contrasena : pass,
+        token_a : that.token,
+        nombre :await that.getUserdata(email)
 
+      }}
+    that.router.navigate(['Fabs/tab1'],parametros)
+    
 }
-else {
-this.presentToast('Error de validacion ='+this.else_msj)
-console.log(login,"no se encontro el usuario");
-}
+  else{that.presentToast('Error de validacion ='+that.else_msj)
+    console.log(login,"no se encontro el usuario");
+    that.presentToast('Error de auntenticacion favor reintar ')
+    }
 }catch (error) {
-//TODO INDICAR QUE OCURRIÓ UN ERROR CON LA API
-console.log('error api'+error)
+  //TODO INDICAR QUE OCURRIÓ UN ERROR CON LA API
+  console.log('error api'+error)
+  that.presentToast('Contraseña o Usuario incorrecto')
 }
 
 }
-async loading_controll() {
-console.log('Loading controller')
-const loading = await this.loadingCtrl.create({
-message: 'Validando información',
-duration: 3000,
-});
+async getUserdata(correo:string){
+  const that= this;
+  try{
+    const respuesta:any = await that.api.getUsuario();
+    const largo = Object.keys(respuesta).length;
+    that.userData=respuesta;
+    console.log(' Menssage: Funcionó ! ')
 
-loading.present();
+    for(let i = 0 ; i < largo; i++){
+
+      if( that.userData[i].email.toString()  != correo  ){
+        console.log('NO SE GUARDÓ!')
+      }else{
+        that.userID=that.userData[i].id;
+        console.log('  ')
+        console.log('Se GUARDÓ !')
+        console.log('Correo guardado: '+that.userData[i].email+'\nNumero Objeto: '+i+"\nID Usuario: "+that.userID)
+        that.nombre_usuario=that.userData[i].first_name+' '+that.userData[i].last_name+'.'
+        that.nombre_usuario=that.nombre_usuario
+        console.log('Nombre usuario en login : '+that.nombre_usuario);
+        console.log(that.userData[i].first_name+' '+that.userData[i].last_name+'.')
+        console.log('  ')
+        
+      }
+    }
+     return that.nombre_usuario
+  }catch(e){
+    console.log('Error api: '+e )
+    return 'Error: '+e
+  }
+  
 }
 
 

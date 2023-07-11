@@ -11,9 +11,9 @@
   [loop]="true"
   [pagination]="true"
   >
-    <swiper-slide *ngFor="let image of images">
+    <swiper-slide *ngFor="let image of images" class="slide-container">
       <ion-card sizeLg="2" sizeMd="2" sizeXs="2">
-      <img [src]="image">
+      <img [src]="image" class="imagen-slide">
     </ion-card>
     </swiper-slide>
   </swiper-container>

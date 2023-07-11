@@ -7,9 +7,9 @@
     padding-bottom: 100;
     margin-top: -24px;
 }
-// *{
-//     background-color: var(--ion-color-reservado);
-// }
+    // *{
+    //     background-color: var(--ion-color-reservado);
+    // }
 swiper-containter{
     width: 100%;
     height: 100%;
@@ -24,12 +24,21 @@ ion-toolbar{
     background-color: var(--ion-color-reservado);
 }
 .holamundo{
-    font-size: 15px;
+    font-size: 35px;
     text-align: start;
 }   
 .holamundoo{
     font-size: 30px;
     text-align: center;
+    opacity: 100%;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color:#66B847;
+    border: 4px;
+    text-shadow: 0.7px 0.7px 0.7px black;
+    
+
+
+    
 }   
 
 .slabel-option{
@@ -41,11 +50,12 @@ ion-toolbar{
 .contenedor-reservas{
     align-items: center;
     text-align: center;
+    margin-bottom: -1%;
 }
 .card-responsive{
-    // height: 600px;
     background-color: white;
-    border-radius: 5.5%;
+    border-radius: 2%;
+    width: auto;
 
 }
 .time{
@@ -55,25 +65,92 @@ ion-toolbar{
     flex: content;
     
 }
-.card-title{
-    font-size: 22px;
-    font-weight: bold;
-    margin-top: 8px;
-    margin-bottom: 8px;
 
-}
 .card {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
+    padding: 40px;
   }
+  .card-title{
+    
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 4px;
+    margin-bottom: 4px;
+
+    }
   
   .card img {
-    width: 100%;
-    height: auto;
+    width: 60%;
+    height: 60%;
     margin-bottom: 10px;
   }
 
   
 
+.botton{
+    height: 32px;
+    width: auto;
+    align-items: center;
+    margin-left:50%;
+}
+.bottone{
+    height: 40px;
+}
+
+.crear-reserva{
+    margin-bottom: -300px;
+
+}
+
+ 
+.card-img{
+     padding-top: 40px;
+    
+}
+
+
+.slide_{
+  margin-top: 730px;
+text-align: center;
+align-items: center;
+}
+.title{
+  margin-bottom: 20px;
+}
+ion-menu::part(backdrop) {
+    background-color: rgba(255, 0, 255, 0.5);
+  }
+  
+  ion-menu::part(container) {
+    border-radius: 0 20px 20px 0;
+  
+    box-shadow: 4px 0px 16px rgba(255, 0, 255, 0.18);
+  }
+  .titulo{
+    text-align: center;
+    background-color:#2DD36F;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 40px ;
+    
+    
+  }
+  .lista{
+    background-color: #2DD36F;
+  }
+  .card-menu{
+    background-color: #2DD36F;
+    padding-bottom: 40px;
+    border-radius: 5%;
+  }
+.sys-mjs{
+    background-color: #2DD36F;
+    color: white;
+    font-size: 20px;
+    font-family: 'Courier New', Courier, monospace;
+}
+.crear-rev{
+    padding-top: 100px ;
+}
