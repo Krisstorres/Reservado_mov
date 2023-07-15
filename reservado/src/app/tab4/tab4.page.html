@@ -15,3 +15,30 @@
 
   <app-explore-container name="Tab 4 page">home</app-explore-container>
 </ion-content>
+
+
+<div class="card-container">
+  <ion-card >
+    <ion-card-header>
+      <ion-card-title>Manual de usuario</ion-card-title>
+      <ion-card-subtitle><ion-text>por reservado.com </ion-text></ion-card-subtitle>  
+    </ion-card-header>
+    <ion-card-content><ion-text>Bienvenido a la seccion de guias y informaciones </ion-text></ion-card-content>
+    <ion-card-content><img src="assets\images\ManualQr.png" alt=""></ion-card-content>
+
+
+    <!-- Contenido de la tarjeta -->
+  </ion-card>
+
+</div>
+    <!-- CHATBOT -->
+    <ion-button color="primary" id="open-popover" Alignment=Center>Recibir asistencia</ion-button>
+    <ion-popover [keepContentsMounted]="true" trigger="open-popover" >
+      <ng-template>
+        <ion-content class="ion-padding iframee"> 
+          <iframe src="https://widget.getcody.ai/99a4b14e-bea6-4c72-bfef-625b4e0df330" frameborder="0" width="100%" height="100%"></iframe>
+         </ion-content>
+      </ng-template>
+    </ion-popover>
+    <!-- CHATBOT -->
+

@@ -20,10 +20,11 @@ export class LoginPage implements OnInit {
   userData:any=[];
   userID:string='';
   nombre_usuario:string='';
-  storage_email=localStorage.setItem('email','')
-  storage_pass=localStorage.setItem('password','')
-  storage_token=localStorage.setItem('token','')
   else_msj:any
+  validador:boolean=false;
+  esActivo:boolean=false;
+  esAdmin:boolean=false;
+  esMoroso:boolean=false;
   constructor(private router:Router
     ,private api:ApiService
     ,private toastController:ToastController
@@ -76,6 +77,7 @@ try {
   let login:any =await  that.api.ValidateApiService(email, pass);
   that.else_msj=login
   if(login['message'] === 'Authentication successful') {
+    that.api.canTrigger();
     console.log(login,'Funncionoooooooo');
     
     //asignado valor a de token  a variable 
@@ -83,18 +85,24 @@ try {
     //asignado valor a de token  a variable 
     //asignando valor de datos a variables 
     console.log("Token :"+that.token) 
-    that.storage_email=localStorage.setItem('email',email)
-    that.storage_pass=localStorage.setItem('password',pass)
-    that. storage_token=localStorage.setItem('token',that.token)
+
     const parametros: NavigationExtras={
       state:{
         correo : email,
         contrasena : pass,
         token_a : that.token,
-        nombre :await that.getUserdata(email)
+        nombre :await that.getUserdata(email),
+        userID:this.userID,
+        userData:this.userData,
+        esmoroso:this.esMoroso,
+        esAdmin:this.esAdmin,
+        esActivo:this.esActivo
+
 
       }}
+    that.api.getvars(email,pass,this.token,await that.getUserdata(email), this.userID,this.userData)
     that.router.navigate(['Fabs/tab1'],parametros)
+  
     
 }
   else{that.presentToast('Error de validacion ='+that.else_msj)
@@ -130,6 +138,13 @@ async getUserdata(correo:string){
         console.log('Nombre usuario en login : '+that.nombre_usuario);
         console.log(that.userData[i].first_name+' '+that.userData[i].last_name+'.')
         console.log('  ')
+        that.api.updateuserData(that.userData[i].is_active,that.userData[i].is_staff,that.userData[i].moroso)
+        that.esMoroso=that.userData[i].moroso;
+        that.esActivo=that.userData[i].is_active;
+        that.esAdmin=that.userData[i].is_staff;
+        that.esAdmin=that.esAdmin;
+        that.esActivo=that.esActivo;
+        that.esMoroso=that.esMoroso;
         
       }
     }

@@ -5,6 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { Tab4PageRoutingModule } from './tab4-routing.module';
 import { Tab4Page } from './tab4.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @NgModule({
   imports: [
@@ -14,6 +15,7 @@ import { ExploreContainerComponentModule } from '../explore-container/explore-co
     Tab4PageRoutingModule,
     ExploreContainerComponentModule
   ],
-  declarations: [Tab4Page]
+  declarations: [Tab4Page],
+  schemas:[CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Tab4PageModule {}

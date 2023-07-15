@@ -15,7 +15,7 @@ export class FixPage implements OnInit {
 
 
   navegar(){
-    this.router.navigate(['Fabs/tab1'])
+    this.router.navigate([''])
   }
 
 }

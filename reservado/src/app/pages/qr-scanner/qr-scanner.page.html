@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar class= lila color="reservado">
+    <ion-title class="text">Reservado.com</ion-title>
+    <ion-title class="textR">Reservas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Tab 3</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <app-explore-container name="Tab 3 page"></app-explore-container>
+</ion-content>
+<div class="unir">
+
+</div>
+<ion-content >
+  <ion-img src="assets\images\qrImagen.svg"></ion-img>
+  <ion-list>
+    <ion-item>
+      <ion-item>
+     
+      </ion-item>
+    </ion-item>
+    <ion-item>
+    </ion-item>
+    <ion-item>
+      <ion-tab-button (click)="logOut()" >
+        <ion-icon name="home"></ion-icon>
+        <ion-label>Regresar a login</ion-label>
+      </ion-tab-button>
+      <ion-tab-button  class="camara" >
+        <ion-icon name="camera"></ion-icon>
+        <ion-label>ScanearQr</ion-label>
+      </ion-tab-button>
+    </ion-item>
+  </ion-list>
+</ion-content>

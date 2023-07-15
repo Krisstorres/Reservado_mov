@@ -34,6 +34,10 @@ import {Swiper} from 'swiper'
   comunidadID:string='';
   minutos:any='';
   mail:string='';
+  esMoroso:string='';
+  esAdmin:string='';
+  esActivo:string='';
+  
 // navigatiosExtras
   storage_email=localStorage.getItem('email')
   mensaje:string='';
@@ -44,6 +48,18 @@ import {Swiper} from 'swiper'
   co:string='';
   con:string='';
   tok:string='';
+  userDatta:any=[];
+  
+  activo:boolean=false;
+  admin:boolean=false;
+  moroso:boolean=false;
+
+  userDaata:any=[];
+  userId:string='';
+  
+
+
+  
 // navigatiosExtras
 //almacenamiento de datos de endpoints backend 
   espaciosComunes:any=[];
@@ -56,6 +72,38 @@ import {Swiper} from 'swiper'
   almacenamiento:any=[];
   items :any= []
   nombresEspacios:any=[];
+  filteredEspacio:any=[];
+  filteredComunidad:any=[];
+  direccionFiltered:any=[];
+    comentarios: any[] = [
+      {
+        nombre: "Usuario1",
+        comentario: "¡Excelente experiencia de reserva! El proceso fue rápido y sencillo. Definitivamente recomendaría reservado.com.",
+        recomendar: true
+      },
+      {
+        nombre: "Usuario2",
+        comentario: "Increíbles opciones de alojamiento. Quedé muy satisfecho con mi reserva a través de reservado.com. Lo recomiendo totalmente.",
+        recomendar: true
+      },
+      {
+        nombre: "Usuario3",
+        comentario: "La plataforma de reservado.com me ayudó a encontrar el mejor precio para mi estadía. Definitivamente la recomendaría a otros viajeros.",
+        recomendar: true
+      },
+      {
+        nombre: "Usuario4",
+        comentario: "Tuve una experiencia maravillosa con reservado.com. El servicio al cliente fue excepcional. Lo recomendaría sin dudarlo.",
+        recomendar: true
+      },
+      {
+        nombre: "Usuario5",
+        comentario: "No puedo decir lo suficiente sobre reservado.com. Hicieron que todo el proceso de reserva fuera tan fácil y rápido. ¡Muy recomendable!",
+        recomendar: true
+      }
+    ];
+  idReservaFiltered:any;
+
 //almacenamiento de datos de endpoints backend 
 //datos de inputs 
   currentFood:any = undefined;
@@ -71,6 +119,7 @@ import {Swiper} from 'swiper'
   esVacio:boolean=false;
   estaValidado:boolean=false;
   borrar_html:boolean=false;
+  clickBadge:boolean=false;
   
 //mostra datos   
 //Variables 
@@ -91,7 +140,7 @@ import {Swiper} from 'swiper'
 //Funciones y variables de arranque 
 ngOnInit() {
     try{
-      //Sacando informacion del Navigation Extras 
+    //Extrayendo informacion del Navigation Extras 
       this.corre= this.router.getCurrentNavigation();
       this.co= this.corre.extras.state.correo.toString();
       this.contra= this.router.getCurrentNavigation();
@@ -100,9 +149,25 @@ ngOnInit() {
       this.tok= this.tokken.extras.state.token_a.toString();
       this.nombr=this.router.getCurrentNavigation();
       this.nombre_usuario=this.nombr.extras.state.nombre.toString();
+      const act :any=this.router.getCurrentNavigation();
+      this.activo=act.extras.state.esActivo;
+      const adm:any=this.router.getCurrentNavigation();
+      this.admin=adm.extras.state.esAdmin;
+      const morr:any=this.router.getCurrentNavigation();
+      this.moroso=morr.extras.state.esmoroso;
+      const dat: any=this.router.getCurrentNavigation();
+      this.userDaata=dat.extras.state.userData;       //rw3r3wr3
+      const idd:any=this.router.getCurrentNavigation();
+      this.userId=idd.extras.state.userID;            //rw3rwr3wr3
+
+      this.api.getvars(this.co,this.con,this.tok,this.nombre_usuario,this.userId,this.userDaata)
+
       console.log('Nombre usuario : '+this.nombre_usuario)
-      var storage_email=localStorage.getItem('email')
       console.log('Usuario :'+this.co+"\nContraseña: "+this.con+"\nToken: "+this.tok);
+      
+      
+      
+      
       try{
         this.presentAlert()
 
@@ -279,7 +344,8 @@ async getEspacios(){
     const response_espacio: any = await that.api.listEspacios();
     if (response_espacio.lenght != 0){
       console.log('Funcionó :'+response_espacio)
-      this.espaciosComunes=response_espacio;
+      that.espaciosComunes=response_espacio; 
+      
     }
 
   }catch(error){
@@ -452,9 +518,6 @@ async TimeValidator(){
   return this.mensaje;
 
 };
-getEspacioComun(){
-  
-}
 formatDate(date: Date): string {
   const year = date.getFullYear().toString().padStart(4, '0');
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -565,10 +628,13 @@ if (largoRespuesta >=1){
   const largo = Object.keys(this.misReservas).length;
   for(let i = 0; i < largo; i++  ){
     
-    if(parseInt(that.misReservas[i].usuario) === parseInt('3')){
+    if(parseInt(that.misReservas[i].usuario) === parseInt(that.userID)){
       that.almacenamiento[num]=that.misReservas[i];
       num=num+1;
       num=num;
+      
+    }else{
+      console.log('usuario no encontrado  ! ')
     }
   }
   console.log('Mensaje : Funcionó');
@@ -604,14 +670,60 @@ async getUserdata(){
 
     for(let i = 0 ; i < largo; i++){
 
-      if( that.userData[i].email.toString()  != that.storage_email   ){
+      if( that.userData[i].email.toString()  != that.co  ){
         console.log('no se guarda')
       }else{
+     
+        if (this.userDaata.lenght != 0 )
+        { 
+          // if(that.userId == ''|| that.userId == 'udefined'){
+          //   that.userId=that.userDaata.id;
+  
+          // }
+        console.log('OBjetos user datas ')
+        that.userID=that.userDaata[i].id;
+        that.userDataFiltered[0]=that.userDaata[i];
+        console.log('  ')
+        console.log('Se GUARDÓ')
+        console.log('Correo guardado: '+that.userDaata[i].email+'\nNumero Objeto: '+i+"\nID Usuario: "+that.userID)
+        if( !that.userDataFiltered.moroso){
+          that.esMoroso ='Moroso';
+        }else{
+          that.esMoroso='Sin deuda';
+
+        }
+        if(! that.userDataFiltered.is_staff){
+         that.esAdmin='Residente'
+        }else{
+          that.esAdmin='Admin';
+        }
+        if(! that.userDataFiltered.is_active){
+          that.esActivo='Habilitado'
+         }else{
+           that.esActivo='Deshabilitado';
+         }}
+        console.log('OBjetos user datas ')
         that.userID=that.userData[i].id;
-        that.userDataFiltered[0]=that.userData[i];
+        that.userDataFiltered[0]=that.userDaata[i];
         console.log('  ')
         console.log('Se GUARDÓ')
         console.log('Correo guardado: '+that.userData[i].email+'\nNumero Objeto: '+i+"\nID Usuario: "+that.userID)
+        if( !that.userDataFiltered.moroso){
+          that.esMoroso ='Moroso';
+        }else{
+          that.esMoroso='Sin deuda';
+
+        }
+        if(! that.userDataFiltered.is_staff){
+         that.esAdmin='Residente'
+        }else{
+          that.esAdmin='Admin';
+        }
+        if(! that.userDataFiltered.is_active){
+          that.esActivo='Habilitado'
+         }else{
+           that.esActivo='Deshabilitado';
+         }
         
         
         
@@ -644,6 +756,7 @@ async makeAReserva(){
       that.maiin();
       that.presentToast('Reserva creada exitosamente ');
       that.borrar_html=true;
+      that.presentAlertt()
     }else{
   
 
@@ -655,7 +768,7 @@ async makeAReserva(){
     console.log(e)
   }
 }
-transformTimeToHours(time : any) {
+transformTimeToHourss(time : any) {
   const var1=new Date();
   time.toString();
   
@@ -764,6 +877,17 @@ async presentAlert() {
 
   await alert.present();
 }
+async presentAlertt() {
+  const alert = await this.alert.create({
+    header: 'Notificación',
+    subHeader: 'Reserva creada con exito!',
+  
+    message: 'Sigue en reservado.com',
+    buttons: ['OK'],
+  });
+
+  await alert.present();
+}
 
 
   
@@ -780,9 +904,99 @@ swiperSlideChanged(e:any){
   console.log('changed',e);
 }
 
+ocultar(){
+  location.reload();
 
+}
 //Logica Pagina Tab1
+  
+
+
+
+
+ transformTimeToHours(time: string): string {
+  const var1=new Date();
+  const var2=new Date();
+  
+
+  var hora=0;
+  var minutos=0;
+  var segundos=0;
+  
+  if(time.includes('15') ==true ){
+    var1.setHours(hora,parseInt('15'),segundos);
   }
+  
+  else if(time.includes('30') ==true ){
+    var1.setHours(hora,parseInt('30'),segundos);
+  }
+  else if(time.includes('01') ==true ){
+    var1.setHours(parseInt('01'),minutos,segundos);
+  }
+  else if(time.includes('02') ==true ){
+    var1.setHours(parseInt('02'),minutos,segundos);
+  }
+   
+  
+
+     
+    const sumaHora=var1.getHours();
+    const sumaMinutos= var1.getMinutes();
+    const sumaSegundos=var1.getSeconds();
+    
+    const sumaCompleta=new Date();
+    sumaCompleta.setHours(sumaHora,sumaMinutos,sumaSegundos);
+
+    const fechaFormateada=sumaCompleta.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    return fechaFormateada;
+
+
+
+ }
+
+
+
+ logOut(){
+  
+  this.router.navigate([''])
+  this.api.validador=false;
+ }
+ menuUsuario(){
+  if(this.activo){
+    this.esActivo='Habilitado';
+  }else{
+    this.esActivo='Deshabilitado';
+  }
+  if(this.moroso){
+    this.esMoroso='Moroso'
+  }else{
+    this.esMoroso='Sin deuda'
+  }
+  if(this.admin){
+    this.esAdmin='Administraor'
+  }else{
+    this.esAdmin='Residente'
+  }
+ }
+ reservaInit(){
+  const parametros: NavigationExtras={
+    state:{
+      correo : this.co,
+      contrasena : this.con,
+      token_a : this.tok,
+      nombre :this.nombre_usuario,
+      userID:this.userID,
+      userData:this.userData,
+      esmoroso:this.esMoroso,
+      esAdmin:this.esAdmin,
+      esActivo:this.esActivo
+
+
+    }}
+  this.router.navigate(['qr-scanner'],parametros)
+
+ }
+}
 
 
   /**

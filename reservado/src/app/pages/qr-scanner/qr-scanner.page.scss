@@ -1,0 +1,84 @@
+.text{
+    color: white;
+}
+.textR{
+    color: white;
+    margin-left: 85%;
+    padding-bottom: 100;
+    margin-top: -24px;
+}
+// *{
+//     background-color: var(--ion-color-reservado);
+// }
+swiper-containter{
+    width: 100%;
+    height: 100%;
+}
+swiper-slide{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+ion-toolbar{
+    background-color: var(--ion-color-reservado);
+}
+.holamundo{
+    font-size: 15px;
+    text-align: start;
+}   
+.holamundoo{
+    font-size: 30px;
+    text-align: center;
+}   
+
+.slabel-option{
+    margin-bottom: 1em;//Ion select option 
+    color: blue;
+    font-size: 100px;
+
+}
+.contenedor-reservas{
+    align-items: center;
+    text-align: center;
+}
+.card-responsive{
+    // height: 600px;
+    background-color: white;
+    border-radius: 5.5%;
+
+}
+.time{
+    align-items:  center   ;
+    text-align: center;
+    justify-content: center;
+    flex: content;
+    
+}
+.card-title{
+    font-size: 22px;
+    font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: 8px;
+
+}
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .card img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+  }
+
+  
+.unir{
+    margin-top: -1200px;
+}
+.camara{
+margin-left: 50%;
+}

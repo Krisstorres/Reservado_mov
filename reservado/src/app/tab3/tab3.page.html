@@ -1,12 +1,106 @@
-<ion-header>
-  <ion-toolbar class= lila color="reservado">
-    <ion-title class="text">Reservado.com</ion-title>
-    <ion-title class="textR">Reservas</ion-title>
-  </ion-toolbar>
-</ion-header>
 
 
-<ion-content [fullscreen]="true">
+<!-- menu desplegable -->
+<ion-content>
+
+  <ion-app >
+      <ion-menu contentId="main-content">
+        <ion-header>
+          <ion-toolbar color="success">
+            <ion-title ><p><strong>Bienvenido: </strong>{{nombre_usuario.split('.')[0]}}</p></ion-title>
+            <ion-row color="success">
+              <ion-col sizeLg="12" sizeMd="12" sizeXs="12" color="success">
+              <ion-card class="card-menu">
+            <ion-list class="lista" color="success"> 
+                <ion-item color="success">
+  
+                  <ion-label class="titulo" *ngFor="let objeto of userDataFiltered  "><h4>Tu email: <span class="sys-mjs">{{ objeto.email }}</span>  </h4></ion-label>
+                </ion-item>
+                <ion-item color="success">
+                  <ion-label class="titulo"*ngFor="let objeto of userDataFiltered  "><h4>Tu Rut: <span class="sys-mjs">{{ objeto.rut }}</span>   </h4></ion-label>
+                </ion-item>         
+              <ion-item color="success">         
+                  <ion-label class="titulo" *ngFor="let objeto of userDataFiltered  "><h4>Posee deuda: <span class="sys-mjs">{{ esMoroso }}</span>   </h4></ion-label>
+                  
+              </ion-item>         
+              <ion-item color="success">
+                  <ion-label class="titulo" *ngFor="let objeto of userDataFiltered  "><h4>Tipo usuario: <span class="sys-mjs">{{ esAdmin }}</span>   </h4></ion-label>
+                </ion-item>         
+                <ion-item color="success">
+                  <ion-label class="titulo" *ngFor="let objeto of userDataFiltered  "><h4>Estado: <span class="sys-mjs">{{ esActivo }}</span>  </h4></ion-label>
+                </ion-item>         
+                <ion-item color="success">
+                  <ion-label class="titulo" *ngFor="let objeto of userDataFiltered  "><h4>Tu iD : <span class="sys-mjs">{{ objeto.id }}</span>   </h4></ion-label>                              
+                </ion-item>     
+                <ion-item color="success ">
+                  <ion-row>
+                    <io-col  sizeLg="12" sizeMd="12" sizeXs="12">
+                      <ion-button class="logOut" (click)="logOut()">Cerrar sesion </ion-button>
+                
+                <!-- tus reservas  -->
+                </io-col>
+                </ion-row>
+                </ion-item>
+            </ion-list>
+            </ion-card>
+              </ion-col>
+            </ion-row>       
+          </ion-toolbar>
+        </ion-header>    
+      </ion-menu>
+      <div class="ion-page" id="main-content">
+        <ion-header class="menu-green">
+          <ion-toolbar color="success">
+            <ion-buttons slot="start">
+              <ion-menu-button ><ion-icon class="icono" name="person-circle-outline"></ion-icon></ion-menu-button>
+            </ion-buttons>
+            <ion-title>Mi perfil </ion-title>
+          </ion-toolbar>
+    <!-- menu desplegable -->
+    <!-- Crea tus reservas -->
+   
+          
+    <!-- tus reservas  -->
+        </ion-header> 
+      </div>
+    <!-- Crea tus reservas -->  
+  </ion-app>
+  </ion-content>
+  <div class="unido">
+
+  </div>
+
+<ion-content>
+  <div class="separator">
+    <ion-label   color="dark"  class="holamundooo">Tu reservas</ion-label>
+  <ion-card-group>
+    <ion-card *ngFor="let objeto of almacenamiento">
+      <img alt="Silhouette of mountains" src="assets\images\edficio{{objeto.id}}.svg" />
+      <ion-card-header>
+        <ion-card-title>Dia de reserva {{objeto.inicio.toString().split('T')[0]}}</ion-card-title>
+        <ion-card-subtitle>Hora de inicio{{objeto.inicio.toString().split('T')[1].split('.')[0].split('-')[0]  }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        Espacio comun: Ivan drago el destructor de reinos
+      </ion-card-content>
+     
+      
+      <ion-button (click)="reservaInit()" class="boton">Iniciar reserva</ion-button>
+    </ion-card>
+  </ion-card-group>
+  </div>
+  </ion-content>
+      <!-- CHATBOT -->
+      <ion-button color="primary" id="open-popover" Alignment=Center>Recibir asistencia</ion-button>
+      <ion-popover [keepContentsMounted]="true" trigger="open-popover" >
+        <ng-template>
+          <ion-content class="ion-padding iframee"> 
+            <iframe src="https://widget.getcody.ai/99a4b14e-bea6-4c72-bfef-625b4e0df330" frameborder="0" width="100%" height="100%"></iframe>
+           </ion-content>
+        </ng-template>
+      </ion-popover>
+      <!-- CHATBOT -->
+<!-- <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Tab 3</ion-title>
@@ -14,21 +108,4 @@
   </ion-header>
 
   <app-explore-container name="Tab 3 page"></app-explore-container>
-</ion-content>
-<ion-content>
-
-  <ion-label   color="dark"  ><ion-title class="holamundoo">Tus  reservas: </ion-title></ion-label>
-
-<ion-div>
-<ion-row>
-  <ion-col sizeLg="6" sizeMd="6" sizeXs="12" *ngFor="let objeto of almacenamiento">
-    <ion-card class="card" >
-      <img src="assets\images\edficio{{objeto.id}}.svg" alt="">
-      <div class="card-title">Fecha de reserva: {{objeto.inicio.toString().split('T')[0]}}</div>
-      <div class="card-title">Hora de reserva: {{objeto.inicio.toString().split('T')[1].split('.')[0]}}</div>
-      <ion-button color="primary" expand="block"  (click)="Navegar()" >Iniciar reserva</ion-button>
-    </ion-card>
-  </ion-col>
-</ion-row>
-</ion-div>
-</ion-content>
+</ion-content> -->
